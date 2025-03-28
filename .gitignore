@@ -21,3 +21,12 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/bootstrap
+/config
+/database
+/lang
+/public/resources
+/routes
+/storage
+/stubs
+/tests
