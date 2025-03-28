@@ -1,0 +1,291 @@
+models:
+
+
+    Language:
+        textde: string:50
+        translation_id: unsignedInteger
+        relationships:
+            hasMany: Address
+
+    LabType:
+        textde: string
+        translation_id: unsignedInteger
+        complexity: unsignedInteger
+        relationships:
+            hasMany: Address
+
+    LabGroup:
+        textde: string:50
+        remarks: string:100
+        relationships:
+            hasMany: Address
+        
+    Status:
+        textde: string:50
+        translation_id: unsignedInteger       
+        relationships:
+            hasMany: Address
+
+    InvoiceType: 
+        textde: string
+        translation_id: unsignedInteger
+        relationships:
+            hasMany: Address
+            
+    ShipType:
+        textde: string:50
+        translation_id: unsignedInteger
+        relationships:
+            hasMany: Address
+            
+
+    ShipFormat:
+        textde: string:50
+        translation_id: unsignedInteger
+        maxweight: unsignedInteger
+        maxnumber: unsignedInteger
+        price: decimal:8,2
+        weight: decimal:8,2
+        lot: unsignedInteger
+        remark: string:100
+        nextformat: unsignedInteger
+        relationships:
+            hasMany: Address
+            
+        
+    ReportFormat:
+        textde: string:50
+        translation_id: unsignedInteger       
+        relationships:
+            hasMany: Address      
+            
+    ReportType:
+        textde: string:50
+        remarks: string:100
+        translation_id: unsignedInteger       
+        relationships:
+            hasMany: Address
+            
+            
+    Address:
+        salutation: string:80 nullable
+        name: string:80
+        address: string:80 nullable
+        address2: string:80 nullable
+        postal_code: string:20 nullable
+        city: string:80 nullable
+        country: string:10 default:'CH'
+        phone: string:20 nullable
+        mail: string:80 nullable
+        contact: string:80 nullable nullable
+        remarks: string:200 nullable nullable
+        language_id: unsignedInteger default:1
+        lab_type_id: unsignedInteger default:1
+        lab_group_id: unsignedInteger nullable
+        qualab: boolean default:1
+        no_charge: boolean default:0
+        status_id: unsignedInteger default:1
+        report_size_id: unsignedInteger default:1
+        invoice_name: string:80 nullable
+        invoice_address: string:80 nullable
+        invoice_address2: string:80 nullable
+        invoice_address3: string:80 nullable
+        invoice_street: string:80 nullable
+        invoice_postal_code: string:20 nullable
+        invoice_city: string:80 nullable
+        invoice_country: string:20 nullable
+        invoice_mail: string:80 nullable
+        invoice_type_id: unsignedInteger nullable
+        no_membership: boolean default:1
+        simple_membership: boolean default:1
+        ship_format_id: unsignedInteger default:1
+        report_type_id: unsignedInteger default:1
+        h3_education_only: boolean default:1
+        difficult: boolean default:1
+        default_password: string:20 nullable
+        online_num: unsignedInteger nullable
+        ship_type_id: unsignedInteger default:1
+        report_format_id: unsignedInteger default:1
+        no_reminder: boolean default:0
+        temp_no_reminder: boolean default:0
+        qualab_num: string:13 nullable
+        sas_num: string:20 nullable
+        Swissmedic_num: string:16 nullable
+        
+        
+        relationships:
+            belongsTo: Language, LabType, LabGroup, Status, InvoiceType, ShipType, ShipFormat,ReportType,ReportFormat  
+            hasMany: Staff, Zsrgln, Subscription, Schedule, Certificate, Shipping, Journal
+
+            
+    
+
+
+    Staff:
+        address_id: unsignedInteger 
+        surname: string:50
+        name: string:50
+        relationships:
+            belongsTo: Address
+    
+    Zsrgln:
+        address_id: unsignedInteger 
+        type: string:24
+        name: string:50
+        surname: string:50
+        additional: string:30
+        postalnumber: string:6
+        place: string:24
+        zsr: string:16
+        gln: string:14
+        from_year: unsignedInteger
+        till_year: unsignedInteger
+        relationships:
+            belongsTo: Address
+    
+    Subscription:
+        address_id: unsignedInteger 
+        product_id: unsignedInteger
+        sample_quantity: unsignedInteger
+        inscription_date: date
+        start_year: unsignedInteger
+        start_quarter: unsignedInteger
+        termination_date: date
+        stop_year: unsignedInteger
+        stop_quarter: unsignedInteger
+        free: binary
+        relationships:
+            belongsTo: Address, Product
+           
+        
+    Product:
+        textde: string:50
+        sample: unsignedInteger
+        code: string:4
+        price: bigint
+        sort: unsignedInteger
+        delivery_note: unsignedInteger
+        packaging: bigint
+        membership: unsignedInteger
+        type: unsignedInteger
+        sort2: unsignedInteger
+        evaluation: unsignedInteger
+        sort3: unsignedInteger
+        size: unsignedInteger
+        weight: bigint
+        translation_id: unsignedInteger
+        matrix: string:6
+        infectious: boolean
+        active: boolean
+        volume: string:10
+        relationships:
+            hasMany: Subscription
+    
+    Schedule:
+        address_id: unsignedInteger
+        schedule_type_id: unsignedInteger
+        year: unsignedInteger
+        quarter: unsignedInteger
+        remark: string:100
+        relationships:
+            belongsTo: Address
+            
+            
+            
+    ScheduleType:
+        textde: string:50
+        translation_id: unsignedInteger
+        relationships:
+            belongsTo: Schedule
+
+    Journal:
+        address_id: unsignedInteger
+        journal_type_id: unsignedInteger
+        sample: string:50
+        remark: string:50
+        year: unsignedInteger
+        quarter: unsignedInteger
+        relationships:
+            belongsTo: Address, JournalType
+    
+    JournalType:
+        textde: string:50
+        translation_id: unsignedInteger
+        relationships:
+            hasMany: Journal
+    
+    Certificate:
+        address_id: unsignedInteger
+        substance_id: unsignedInteger
+        success: unsignedInteger
+        participation: unsignedInteger
+        evaluation: string:50
+        year: unsignedInteger
+        relationships:
+            belongsTo: Address
+    
+    Shipping:
+        address_id: unsignedInteger
+        termin: unsignedInteger
+        size: unsignedInteger
+        language_id: unsignedInteger
+        priority: unsignedInteger
+        material: bigint
+        amount: unsignedInteger
+        note: string:100
+        weight: decimal:8,2
+        grp: unsignedInteger
+        lot: unsignedInteger
+        packing: unsignedInteger
+        sort: string:100
+        year: unsignedInteger
+        quarter: unsignedInteger
+        relationships:
+            belongsTo: Address
+        
+    Protocol:
+        address_id: unsignedInteger
+        method_id: unsignedInteger
+        unit_id: unsignedInteger
+        device_id: unsignedInteger
+        device_num: string:20
+        Serialnumber: string:20
+        department: unsignedInteger
+        start_date: datetime
+        start_year: unsignedInteger
+        start_quarter: unsignedInteger
+        stop_date: datetime
+        stop_year: unsignedInteger
+        stop_quarter: unsignedInteger
+        relationships:
+            belongsTo: Address, Method
+    
+    Method:
+        number: unsignedInteger
+        substance_id: unsignedInteger
+        instrument_id: unsignedInteger
+        substancede: string:50
+        instriumentde: string:50
+        sort: unsignedInteger
+        relationships:
+            belongsTo: Substance, Instrument
+
+    Instrument:
+        textde: string:50
+        translation_id: unsignedInteger
+        relationships:
+            hasMany: Method
+    
+    Survey:
+        year: unsignedInteger
+        quarter: unsignedInteger
+        shipping: datetime
+        closing: datetime
+        replacementdate: datetime
+        end: datetime
+        status: unsignedInteger
+        remark: string:50
+        online_id: unsignedInteger
+        
+    
+        
