@@ -30,7 +30,7 @@ class TargetResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->columns(9)
+            ->columns(11)
             ->schema([
                 Forms\Components\Select::make('method_id')
                     ->relationship('method', 'id'),
@@ -40,11 +40,13 @@ class TargetResource extends Resource
                     ->maxLength(50),
                 Forms\Components\TextInput::make('instrumentde')
                     ->maxLength(50),
-                Forms\Components\Select::make('statustarget')
-                    ->columnStart(1)
-                    ->columnSpan(2)
-                    ->label('Status')
-                    ->relationship('statustarget', 'textde'),
+                Forms\Components\TextInput::make('statustarget_id')
+                    ->numeric(),    
+                // Forms\Components\Select::make('statustarget')
+                //     ->columnStart(1)
+                //     ->columnSpan(2)
+                //     ->label('Status')
+                //     ->relationship('statustarget', 'textde'),
                 Forms\Components\TextInput::make('value')
                     ->columnStart(1)
                     ->label('Prov Zielwert')
@@ -132,12 +134,12 @@ class TargetResource extends Resource
                     ->numeric(),
               
 
-                // Forms\Components\TextInput::make('fmit')
-                //     ->numeric(),
+                Forms\Components\TextInput::make('fmit')
+                    ->numeric(),
 
 
-                // Forms\Components\TextInput::make('points')
-                //     ->numeric(),
+                Forms\Components\TextInput::make('points')
+                    ->numeric(),
 
                 
                 // Forms\Components\TextInput::make('quarter')
