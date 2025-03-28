@@ -287,5 +287,21 @@ models:
         remark: string:50
         online_id: unsignedInteger
         
-    
+    Target:
+        survey_id: unsignedInteger
+        method_id: unsignedInteger
+        sample_id: unsignedInteger
+        method_num: unsignedInteger
+        substancede: string:100
+        instrumentde: string:100
+        value: decimal:15,5
+        mean: decimal:15,5
+        effective_toleranceabs: decimal:15,5
+        total: unsignedInteger
+        count1: unsignedInteger
+        count2: unsignedInteger
+        count3: unsignedInteger
+        count4: unsignedInteger
+        sum: decimal: 15,5
+        
         

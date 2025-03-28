@@ -54,12 +54,10 @@ class TargetResource extends Resource
                     ->label('Zielwert')
 
                     ->numeric(),
-                Forms\Components\TextInput::make('deviation')
+                Forms\Components\TextInput::make('effective_toleranceabs')
                     ->label('Abweichung')
                     ->numeric(),
-                Forms\Components\TextInput::make('custom_dev')
-                    ->label('Toleranz Manuell')
-                    ->numeric(),    
+ 
                 Forms\Components\TextInput::make('code')
                     ->columnstart(1)
                     ->columnspan(3)
@@ -125,6 +123,10 @@ class TargetResource extends Resource
                     ->numeric(),
                 Forms\Components\TextInput::make('sq9')
                     ->numeric(),
+                Forms\Components\TextInput::make('sq10')
+                    ->numeric(),    
+                Forms\Components\TextInput::make('sq11')
+                    ->numeric(),    
                 Forms\Components\TextInput::make('autp')
                     ->label('Typ der Auswertung 1=qnt, 2=qlt, 3=sqnt')
                     ->numeric(),
@@ -179,7 +181,7 @@ class TargetResource extends Resource
                 Tables\Columns\TextColumn::make('mean')
                     ->label('Zielwert')
                     ->numeric(),
-                Tables\Columns\TextColumn::make('deviation')
+                Tables\Columns\TextColumn::make('effective_toleranceabs')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total')
@@ -252,6 +254,12 @@ class TargetResource extends Resource
                 Tables\Columns\TextColumn::make('sq9')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('sq10')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('sq11')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('autp')
                     ->numeric()
                     ->sortable(),
@@ -270,12 +278,6 @@ class TargetResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('year')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('quarter')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('points')
                     ->numeric()
                     ->sortable(),
