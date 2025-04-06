@@ -32,7 +32,7 @@ class StatmethodResource extends Resource
                     ->relationship('method', 'id'),
                 Forms\Components\Select::make('survey_id')
                     ->relationship('survey', 'id'),
-                Forms\Components\TextInput::make('sample')
+                Forms\Components\TextInput::make('sample_id')
                     ->numeric(),
                 Forms\Components\TextInput::make('cnt_valid')
                     ->numeric(),
@@ -90,7 +90,7 @@ class StatmethodResource extends Resource
                 Tables\Columns\TextColumn::make('survey.id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('sample')
+                Tables\Columns\TextColumn::make('sample_id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('cnt_valid')

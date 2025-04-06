@@ -15,7 +15,7 @@ class Shipping extends Model
     protected $casts = [
         'id' => 'integer',
         'address_id' => 'integer',
-       'size' => 'integer',
+        'ship_format_id' => 'integer',
         'language_id' => 'integer',
         'priority' => 'integer',
         'amount' => 'integer',
@@ -38,6 +38,12 @@ class Shipping extends Model
     {
         return $this->belongsTo(Address::class);
     }
+
+    public function ship_format(): BelongsTo
+    {
+        return $this->belongsTo(ShipFormat::class);
+    }
+
 
     public function language(): BelongsTo
     {

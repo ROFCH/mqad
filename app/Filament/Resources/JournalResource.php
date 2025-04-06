@@ -22,29 +22,48 @@ class JournalResource extends Resource
     protected static ?string $navigationLabel = 'Ereignisse';
 
     protected static ?string $pluralModelLabel = 'Ereignisse';
-    protected static ?string $modelLabel = 'Ereigniss';
+    protected static ?string $modelLabel = 'Ereignis';
 
     public static function form(Form $form): Form
     {
         return $form
+            ->columns(8)
             ->schema([
+                Forms\Components\TextInput::make('survey_id')
+                ->label('Ringversuch')
+                    ->numeric(),
+                Forms\Components\TextInput::make('quarter')
+                    ->label('Quartal')
+                    ->numeric(),
+                Forms\Components\TextInput::make('year')
+                    ->label('Jahr')
+                    ->numeric(),
                 Forms\Components\Select::make('address_id')
-                    ->relationship('address', 'name'),
-                Forms\Components\Select::make('journalType_id')
+                    ->label('Teilnehmer')
+                    ->relationship('address', 'name')
+                    ->columnStart(1)
+                    ->columnSpan(2),
+                Forms\Components\Select::make('journal_type_id')
+                    ->label('Eintragtyp')
+                    ->columnStart(1)
                     ->relationship('journaltype', 'textde'),
-                Forms\Components\TextInput::make('journalType_id'),    
+                // Forms\Components\TextInput::make('journal_type_id'),    
                 Forms\Components\TextInput::make('sample')
+                ->label('Probenbezeichnungen')
+                    ->columnStart(1)
+                    ->columnSpan(4)
                     ->maxLength(50),
                 Forms\Components\TextInput::make('remark')
+                    ->label('Bemerkungen')
+                    ->columnStart(1)
+                    ->columnSpan(4)
                     ->maxLength(50),
-                Forms\Components\TextInput::make('quarter')
-                    ->numeric(),
+
                 Forms\Components\TextInput::make('user')
+                    ->label('Benutzerkürzel')
+                    ->columnStart(1)
                     ->maxLength(10),
-                Forms\Components\TextInput::make('year')
-                    ->numeric(),
-                Forms\Components\TextInput::make('survey_id')
-                    ->numeric(),
+                
             ]);
     }
 
@@ -63,22 +82,26 @@ class JournalResource extends Resource
                 Tables\Columns\TextColumn::make('sample')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('remark')
+                    ->label('Bemerkungen')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('quarter')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('year')
-                    ->numeric()
+                    ->label('Jahr')
+                    
                     ->sortable(),
                 Tables\Columns\TextColumn::make('survey_id')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
             ])
             ->filters([
                 //

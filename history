@@ -4,3 +4,26 @@ targets Tabelle
 
 https://blueprint.laravelshift.com/
 
+
+Targets hängt von 
+
+methods
+statustargets
+surveys
+
+wird auch für 
+statmethods benötigt
+
+
+
+Journals direkt und Journal via Adressen überarbeitet
+(heisst Ereignisse, und ist bei Daten zur Adresse)
+
+
+
+5.4.2025
+shippings 
+Die Spalte size heisst neu ship_format_id
+
+
+

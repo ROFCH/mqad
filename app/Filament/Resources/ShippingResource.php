@@ -32,8 +32,8 @@ class ShippingResource extends Resource
                     ->relationship('address', 'name'),
                 Forms\Components\TextInput::make('shipType.textde')
                     ->Label('Termin'),
-                Forms\Components\TextInput::make('size')
-                    ->numeric(),
+                Forms\Components\Select::make('ship_format_id')
+                    ->relationship('ship_format', 'textde'),
                 Forms\Components\Select::make('language_id')
                     ->relationship('language', 'id'),
                 Forms\Components\TextInput::make('priority')
@@ -71,7 +71,7 @@ class ShippingResource extends Resource
                 Tables\Columns\TextColumn::make('termin')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('size')
+                Tables\Columns\TextColumn::make('ship_format.textde')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('language.id')

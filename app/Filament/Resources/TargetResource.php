@@ -32,15 +32,26 @@ class TargetResource extends Resource
         return $form
             ->columns(11)
             ->schema([
-                Forms\Components\Select::make('method_id')
-                    ->relationship('method', 'id'),
+                // Forms\Components\Select::make('method_id')
+                //     ->relationship('method', 'id'),
+                Forms\Components\TextInput::make('method_id')
+                    ->label('Methoden - ID')
+                    ->numeric(),  
+
+                Forms\Components\TextInput::make('sample_id')
+                    ->label('Probennummer')
+                    ->numeric(),    
                 Forms\Components\TextInput::make('method_num')
+                    ->label('Methodennummer')
                     ->numeric(),
                 Forms\Components\TextInput::make('substancede')
+                    ->label('Substanzinfo')
                     ->maxLength(50),
                 Forms\Components\TextInput::make('instrumentde')
+                    ->label('Substanzinfo')
                     ->maxLength(50),
                 Forms\Components\TextInput::make('statustarget_id')
+                    ->helperText('>=4 wird nicht mehr berechnet')
                     ->numeric(),    
                 // Forms\Components\Select::make('statustarget')
                 //     ->columnStart(1)
@@ -54,13 +65,16 @@ class TargetResource extends Resource
                     ->numeric(),
                 Forms\Components\TextInput::make('mean')
                     ->label('Zielwert')
+                    ->helperText('Zielwert, kann verändert werden')
 
                     ->numeric(),
                 Forms\Components\TextInput::make('effective_toleranceabs')
                     ->label('Abweichung')
+                    ->helperText('Absolute Abweichung, kann verändert werden')
                     ->numeric(),
  
                 Forms\Components\TextInput::make('code')
+                    ->helperText('Alle richtigen Codes, durch Kommas getrennt')
                     ->columnstart(1)
                     ->columnspan(3)
                     ->maxLength(50),    
@@ -167,6 +181,11 @@ class TargetResource extends Resource
 
             ->defaultSort('method_num', 'asc')
             ->columns([
+                Tables\Columns\TextColumn::make('method_id')
+                    ->sortable()
+                    ->searchable(isIndividual: true),
+                Tables\Columns\TextColumn::make('sample_id')
+                    ->numeric(),
                 Tables\Columns\TextColumn::make('method_num')
                     ->sortable()
                     ->searchable(isIndividual: true),

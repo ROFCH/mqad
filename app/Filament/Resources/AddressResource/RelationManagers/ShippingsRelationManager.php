@@ -41,8 +41,13 @@ class ShippingsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('schedule_type.textde')
                     ->label('Versandtyp'),
+                Tables\Columns\TextColumn::make('ship_format.textde')
+                    ->label('Versandformat')
+                    ->numeric(),    
                 Tables\Columns\TextColumn::make('note')
                     ->label('Kurz-Lieferschein'),
+                Tables\Columns\TextColumn::make('lot')
+                    ->label('Lot-Nr'),    
                 Tables\Columns\TextColumn::make('year')
                     ->label('Jahr'),
                 Tables\Columns\TextColumn::make('quarter')
