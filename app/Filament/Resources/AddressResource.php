@@ -109,7 +109,7 @@ class AddressResource extends Resource
                                     ->relationship('labGroup', 'textde')
                                     ->nullable(),
                                 Forms\Components\Checkbox::make('qualab')
-                                    ->default(true)
+                                    ->default(false)
                                     ->inline(),
 
   
@@ -157,7 +157,11 @@ class AddressResource extends Resource
                                 Forms\Components\Checkbox::make('h3_education_only')
                                     ->label('H3 nur für Weiterbilung')
                                     ->default(false)  
-                                    ->inline(),    
+                                    ->inline(),   
+                                Forms\Components\Checkbox::make('report_multi_device')
+                                    ->label('Mit Risikoabschätzung bei mehreren Geräten')
+                                    ->default(false)  
+                                    ->inline(),     
                                 Forms\Components\TextInput::make('report_size_id')
                                     ->label('Layout für Auswertungen')
                                     ->default(1)  
@@ -279,33 +283,27 @@ class AddressResource extends Resource
                     ->label('Stadt')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('country')
-                    ->label('Land')
-                    ->searchable(),
+                    ->label('Land'),
                 Tables\Columns\TextColumn::make('phone')
                     ->label('Telefon')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('mail')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('contact')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('remarks')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('language.textde')
-                    ->label('Sprache')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('labType.textde')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('labGroup.textde')
-                    ->numeric()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('contact')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('remarks')
+                //     ->label('Bemerkungen'),
+                // Tables\Columns\TextColumn::make('language.textde')
+                //     ->label('Sprache'),
+                // Tables\Columns\TextColumn::make('labType.textde')
+                //     ->numeric(),
+                // Tables\Columns\TextColumn::make('labGroup.textde')
+                //     ->numeric(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
-                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
-                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([

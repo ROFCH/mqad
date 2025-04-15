@@ -90,12 +90,17 @@ class InvoicesRelationManager extends RelationManager
 
             ])
             ->filters([
-                Filter::make('Standard Jahr')->query(
+                // Filter::make('Standard Jahr')->query(
+                //     function (Builder $query): Builder {
+                //         //return $query->where('year',date("Y"));
+                //         return $query->where('year',config('app.year'));
+                //     }
+                // ) ->label(config('app.year'))->default(),
+                Filter::make('Aktuelles_Jahr')->query(
                     function (Builder $query): Builder {
-                        //return $query->where('year',date("Y"));
-                        return $query->where('year',config('app.year'));
+                        return $query->where('year',date("Y"));
                     }
-                ) ->label(config('app.year'))->default(),
+                ) ->label('Aktuelles Jahr')->default(),
 
                 Filter::make('Letztes_Jahr')->query(
                     function (Builder $query): Builder {

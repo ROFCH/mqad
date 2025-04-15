@@ -57,9 +57,9 @@ class ProtocolsRelationManager extends RelationManager
                     ->preload()
                     ->optionsLimit(10000)
                     ->searchable()
-                    ->relationship('method','number',
+                    ->relationship('method','id',
                         modifyQueryUsing: fn (Builder $query) => $query->orderBy('number', 'asc'))
-                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->number}  ({$record->id}) - {$record->substancede} "),
+                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->number}  ({$record->id}) - {$record->substancede} - {$record->instrumentde} "),
 
                 // Forms\Components\Select::make('unit_id')
                 //     ->options(fn (Get $get): Collection => Unit::query()
@@ -128,18 +128,23 @@ class ProtocolsRelationManager extends RelationManager
                     ->numeric(),
                 //Forms\Components\DateTimePicker::make('start_date'),
                 Forms\Components\TextInput::make('start_year')
+                    ->columnStart(1)    
                     ->label('Beginn Jahr')
                     ->default(date('Y')),
                 Forms\Components\TextInput::make('start_quarter')
                     ->label('Beginn Quartal')
-                    ->numeric(),
+                    ->numeric()
+                    ->default(1),
                 //Forms\Components\DateTimePicker::make('stop_date'),
                 Forms\Components\TextInput::make('stop_year')
+                    ->columnStart(1)
                     ->label('End Jahr')
-                    ->numeric(),
+                    ->numeric()
+                    ->default(0),
                 Forms\Components\TextInput::make('stop_quarter')
                     ->label('End Quartal')
-                    ->numeric(),
+                    ->numeric()
+                    ->default(0),
             ]);
     }
 

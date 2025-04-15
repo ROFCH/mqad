@@ -64,7 +64,8 @@ class MethodResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
                 Tables\Columns\TextColumn::make('number')
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('substance.textde')
                     ->numeric()
                     ->sortable(),

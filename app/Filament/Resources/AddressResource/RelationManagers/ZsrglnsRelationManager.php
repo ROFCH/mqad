@@ -34,7 +34,7 @@ class ZsrglnsRelationManager extends RelationManager
                     ->label('Vorname'),
                     Forms\Components\TextInput::make('additional') 
                     ->label('Zusatz'),
-                    Forms\Components\TextInput::make('postalnumber') 
+                    Forms\Components\TextInput::make('postal_code') 
                     ->label('PLZ'),
                     Forms\Components\TextInput::make('place') 
                     ->label('Ort'),
@@ -58,12 +58,12 @@ class ZsrglnsRelationManager extends RelationManager
                     ->label('Name'),
                 Tables\Columns\TextColumn::make('surname')
                     ->label('Vorname'),
-                Tables\Columns\TextColumn::make('additional')
-                    ->label('Zusatz'),
-                Tables\Columns\TextColumn::make('postalnumber')
-                    ->label('PLZ'),
-                Tables\Columns\TextColumn::make('place')
-                    ->label('Ort'),
+                // Tables\Columns\TextColumn::make('additional')
+                //     ->label('Zusatz'),
+                // Tables\Columns\TextColumn::make('postal_code')
+                //     ->label('PLZ'),
+                // Tables\Columns\TextColumn::make('place')
+                //     ->label('Ort'),
 
             ])
             ->filters([

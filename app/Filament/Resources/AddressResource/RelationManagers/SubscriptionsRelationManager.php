@@ -32,12 +32,22 @@ class SubscriptionsRelationManager extends RelationManager
                         modifyQueryUsing: fn (Builder $query) => $query->where('sample',">",0)->orderBy('code'))
                     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->code} {$record->textde}"),
                 Forms\Components\TextInput::make('sample_quantity')
-                    ->label('Anzahl'),
+                    ->label('Anzahl')
+                    ->default(1),
                 Forms\Components\TextInput::make('start_year')
                     ->default(date("Y"))
                     ->label('Beginn Jahr'),
                 Forms\Components\TextInput::make('start_quarter')
-                    ->label('Beginn Quartal'),
+                    ->label('Beginn Quartal')
+                    ->default(1),
+                Forms\Components\TextInput::make('stop_year')
+                    ->label('End Jahr')
+                    ->placeholder('Jahr')
+                    ->default(0),
+                Forms\Components\TextInput::make('stop_quarter')
+                    ->label('End Quartal')
+                    ->placeholder('Quartal')
+                    ->default(0),        
                 Forms\Components\Checkbox::make('free')
                     ->label('gratis'),
 

@@ -39,6 +39,12 @@ class ShippingsRelationManager extends RelationManager
 
             ->recordTitleAttribute('shipping_id')
             ->columns([
+                Tables\Columns\TextColumn::make('year')
+                    ->label('Jahr'),
+                Tables\Columns\TextColumn::make('quarter')
+                    ->label('Quartal'),    
+                Tables\Columns\TextColumn::make('lot')
+                    ->label('Lot-Nr'),       
                 Tables\Columns\TextColumn::make('schedule_type.textde')
                     ->label('Versandtyp'),
                 Tables\Columns\TextColumn::make('ship_format.textde')
@@ -46,12 +52,9 @@ class ShippingsRelationManager extends RelationManager
                     ->numeric(),    
                 Tables\Columns\TextColumn::make('note')
                     ->label('Kurz-Lieferschein'),
-                Tables\Columns\TextColumn::make('lot')
-                    ->label('Lot-Nr'),    
-                Tables\Columns\TextColumn::make('year')
-                    ->label('Jahr'),
-                Tables\Columns\TextColumn::make('quarter')
-                    ->label('Quartal'),
+ 
+
+
             ])
             ->filters([
                 // Filter::make('Aktuelles Jahr')->query(

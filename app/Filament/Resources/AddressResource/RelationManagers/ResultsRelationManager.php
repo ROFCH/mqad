@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\AddressResource\RelationManagers;
 
 use App\Models\Method;
+use App\Models\Unit;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -36,6 +37,22 @@ class ResultsRelationManager extends RelationManager
                 ->getSearchResultsUsing(fn (string $search): array => Method::where('number', 'like', "%{$search}%")->limit(50)->pluck('number', 'id')->toArray())
                 ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->number} {$record->substancede} {$record->instrumentde}")
                 ->searchable(),
+
+                Forms\Components\Select::make('unit_id')
+                    ->label('Einheit')
+                ->relationship('unit', 'id')
+                ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->substance_id} {$record->unit_symobl_id}"),
+                
+                //->getSearchResultsUsing(fn (string $search): array => Unit::where('substance_id', 'like', 'method.substance.id')->pluck('substance_id', 'unit_symbol_id')->toArray())
+
+                //->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->id} {$record->unit_symbol_id}"),
+                // ->default(1)
+                // ->optionsLimit(10000)
+                // ->preload()
+                // ->getSearchResultsUsing(fn (string $search): array => Unit::where('substance_id', 'like', 'method.substance.id')->pluck('substance_id', 'unit_symbol_id')->toArray())
+                // ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->substance_id} {$record->unit_symbol_id}")
+                // ->searchable(),
+
 
                 Forms\Components\TextInput::make('value')
                     ->label('Wert'),
