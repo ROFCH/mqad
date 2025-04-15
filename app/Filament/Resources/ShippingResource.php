@@ -28,10 +28,10 @@ class ShippingResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('address_id')
-                    ->relationship('address', 'name'),
-                Forms\Components\TextInput::make('shipType.textde')
-                    ->Label('Termin'),
+                // Forms\Components\Select::make('address_id')
+                //     ->relationship('address', 'name'),
+                // Forms\Components\TextInput::make('shipType.textde')
+                //     ->Label('Termin'),
                 Forms\Components\Select::make('ship_format_id')
                     ->relationship('ship_format', 'textde'),
                 Forms\Components\Select::make('language_id')
@@ -52,8 +52,7 @@ class ShippingResource extends Resource
                     ->numeric(),
                 Forms\Components\TextInput::make('packing')
                     ->numeric(),
-                Forms\Components\TextInput::make('sort')
-                    ->maxLength(100),
+
                 Forms\Components\TextInput::make('year')
                     ->numeric(),
                 Forms\Components\TextInput::make('quarter')
@@ -68,13 +67,11 @@ class ShippingResource extends Resource
                 Tables\Columns\TextColumn::make('address.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('termin')
-                    ->numeric()
-                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('ship_format.textde')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('language.id')
+                Tables\Columns\TextColumn::make('language_id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('priority')
@@ -100,8 +97,7 @@ class ShippingResource extends Resource
                 Tables\Columns\TextColumn::make('packing')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('sort')
-                    ->searchable(),
+
                 Tables\Columns\TextColumn::make('year')
                     ->numeric()
                     ->sortable(),

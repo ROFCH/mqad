@@ -6,11 +6,13 @@ use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use TextColumn\TextColumnSize;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Columns\TextColumn;
 
 class CertificateRelationManager extends RelationManager
 {
@@ -28,11 +30,11 @@ class CertificateRelationManager extends RelationManager
         
             ->schema([
 
-                Forms\Components\Select::make('address_id')
-                    ->label('Teilnehmer')
-                    ->relationship('address', 'id')
-                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->id} - {$record->name}")
-                    ->disabled(),
+                // Forms\Components\Select::make('address_id')
+                //     ->label('Teilnehmer')
+                //     ->relationship('address', 'id')
+                //     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->id} - {$record->name}")
+                //     ->disabled(),
                 Forms\Components\Select::make('substance_id')
                     ->columnStart(1)
                     ->label('Substanz')
@@ -71,12 +73,14 @@ class CertificateRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('substance.textde')
                     ->label('Substanz'),
                 Tables\Columns\TextInputColumn::make('success')
-                    ->label('Erfolg'),
+                    ->label('Erfolg')
+                    ->type('number')
+                    ->mask('99'),
                 Tables\Columns\TextInputColumn::make('participation')
                     ->label('Teilnahme'),
                 Tables\Columns\TextInputColumn::make('evaluation')
                     ->label('Auswertung')
-                ->extraAttributes(['style' => 'max-width: 100px']),
+                ->extraAttributes(['style' => 'max-width: 30px']),
                 Tables\Columns\TextColumn::make('year')
                     ->label('Jahr'),
             ])

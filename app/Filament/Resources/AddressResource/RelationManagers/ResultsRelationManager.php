@@ -69,12 +69,15 @@ class ResultsRelationManager extends RelationManager
                     ->label("Zusatzwert (mm)"),
                 Forms\Components\TextInput::make('device_num')
                     ->label("Gerätenummer"),
+                Forms\Components\TextInput::make('survey_id')
+                    ->label("Ringversuchsnummer"),
             ]);
     }
 
     public function table(Table $table): Table
     {
         return $table
+
             ->recordTitleAttribute('address_id')
             ->columns([
 

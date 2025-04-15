@@ -73,6 +73,8 @@ class InvoicesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('booking')
                     ->date('Y-m-d')
                     ->label('Buchungsdatum'),
+                Tables\Columns\TextColumn::make('product.code')
+                    ->label('Code'),  
                 Tables\Columns\TextColumn::make('product.textde')
                     ->label('Buchung'),
                 Tables\Columns\TextColumn::make('debit')

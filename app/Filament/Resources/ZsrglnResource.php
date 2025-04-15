@@ -38,7 +38,7 @@ class ZsrglnResource extends Resource
                     ->maxLength(50),
                 Forms\Components\TextInput::make('additional')
                     ->maxLength(30),
-                Forms\Components\TextInput::make('postalnumber')
+                Forms\Components\TextInput::make('postal_code')
                     ->maxLength(6),
                 Forms\Components\TextInput::make('place')
                     ->maxLength(24),
