@@ -54,4 +54,10 @@ class Product extends Model
     {
         return $this->belongsTo(Translation::class);
     }
+
+    public function shipformat(): BelongsTo
+    {
+        return $this->belongsTo(ShipFormat::class);
+    }
+
 }

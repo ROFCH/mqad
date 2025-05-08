@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 use Filament\Support\RawJs;
 use App\Filament\Exports\test;
 use Filament\Resources\Resource;
+use Illuminate\Database\Eloquent\Model;
 use App\Filament\Exports\ProductExporter;
 use Filament\Tables\Actions\ExportAction;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,35 +33,97 @@ class ProductResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
+            ->columns(8)
             ->schema([
                 Forms\Components\TextInput::make('textde')
+                    ->columnSpan(2)
                     ->label('Bezeichnung')
                     ->maxLength(50)
                     ->required()
-                    ->helperText('Das ist die deutsche Bezeichnung der Probe')
-                    ->hint('Das ist ein Hint')
-                    ->placeholder('Hallo Placeholder'),
+                    ->helperText('Interne Bezeichnung der Probe')
+                    #->hint('Das ist ein Hint')
+                    ->placeholder('Probenbezeichnung'),
                     //->HasHelperText("Das ist die deutsche Bezeichnung der Probe"),
+
+
+
+
+                Forms\Components\TextInput::make('membership')
+                    ->label('Bei Mitgliederbeitrag >0')
+                    ->default(0)
+                    ->helperText('Binär, gibt an welche Proben im Beitrag drin sind')
+                    ->numeric(),    
                 Forms\Components\TextInput::make('sample')
                     ->label('>0 = es ist eine Probe')
+                    ->helperText('Ist die alte Probennummer. Nicht mehr verwenden')
                     ->numeric(),
-                Forms\Components\TextInput::make('sample_num')
-                    ->label('Anzahl Proben'),
+
+                Forms\Components\TextInput::make('translation_id')
+                    ->columnStart(1)
+                    ->label('Übersetzungsnummer')
+                    ->numeric(),
+
+
+                Forms\Components\Select::make('translation_id')
+
+                    ->columnSpan(5)
+                    ->searchable()
+                    ->label('Übersetzungen der Probenbezeichnung')
+                    ->relationship('translation','de')
+                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->id} :  {$record->de}   (fr: {$record->fr} -  it: {$record->it} -  en: {$record->en})")
+                    ->helperText('Neue Einträge über Einstellungen->Übersetzungen machen '),  
+
+
                 Forms\Components\TextInput::make('code')
+                    ->columnStart(1)
                     ->label('Probenkürzel')
                     ->maxLength(4),
+                Forms\Components\TextInput::make('sample_num')
+                    ->label('Anzahl Proben')
+                    ->default(1)
+                    ->numeric(),
+
+
+
+
+
                 Forms\Components\TextInput::make('price')
+                    ->columnStart(1)
                     ->label('Preis')
                     ->prefix('CHF')
                     ->numeric(2),
-                Forms\Components\TextInput::make('sort')
-                    ->numeric(),
+                #Forms\Components\TextInput::make('sort')
+                #    ->numeric(),
+
+
+                Forms\Components\Select::make('delivery_note')
+                    ->columnStart(1)
+                    ->columnSpan(2)
+                    ->searchable()
+                    ->label('Bemerkung auf Lieferschein aus Übersetzungen')
+                    ->relationship('translation','de')
+                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->id} :  {$record->de}   (fr: {$record->fr} -  it: {$record->it} -  en: {$record->en})")
+                    ->helperText('Neue Einträge über Einstellungen->Übersetzungen machen '),  
+
                 Forms\Components\TextInput::make('delivery_note')
+                    ->label('Bemerkung auf Lieferschein, Nummer')
                     ->numeric(),
-                Forms\Components\TextInput::make('packaging')
-                    ->numeric(),
-                Forms\Components\TextInput::make('membership')
-                    ->numeric(),
+
+
+                #Forms\Components\TextInput::make('packaging')
+                #    ->numeric(),
+                
+                Forms\Components\Select::make('ship_format_id')
+                    ->columnStart(1)
+                    ->label('Minimal Versandformat')
+                    ->default(1)
+                    ->helperText('Das minimale Versandformat für diese Probe')
+                    ->relationship('shipformat','textde'),
+                Forms\Components\TextInput::make('ship_priority_id')
+                    ->label('Versandpriortät')
+                    ->helperText('1=normal, 4=erst am zweiten Tag')
+                    ->numeric(),    
+  
                 Forms\Components\TextInput::make('type')
                     ->numeric(),
                 Forms\Components\TextInput::make('sort2')
@@ -123,6 +186,14 @@ class ProductResource extends Resource
                     ->label('Verpackung')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('ship_format_id')
+                    ->label('Verpackungsformat')
+                    ->numeric(),
+                Tables\Columns\TextColumn::make('ship_priority_id')
+                    ->label('Verpackungspriorität')
+                    ->numeric(),
+
+
                 Tables\Columns\TextColumn::make('membership')
                     ->numeric()
                     ->sortable()

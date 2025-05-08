@@ -86,6 +86,8 @@ class ResultsRelationManager extends RelationManager
             Tables\Columns\TextColumn::make('method.substance.product.code')
                 ->label('Probe')
                 ->sortable(),
+            Tables\Columns\TextColumn::make('sample_id')
+                ->label('Probe'), 
             Tables\Columns\TextColumn::make('method.substance.textde')
                 ->label('Substanz')
                 ->sortable(),
