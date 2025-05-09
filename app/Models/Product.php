@@ -23,6 +23,7 @@ class Product extends Model
         'delivery_note' => 'integer',
         'price'=>'decimal:2',
         'membership' => 'integer',
+        'ship_format_id' => 'integer',
         'type' => 'integer',
         'sort2' => 'integer',
         'evaluation' => 'integer',
@@ -55,7 +56,7 @@ class Product extends Model
         return $this->belongsTo(Translation::class);
     }
 
-    public function shipformat(): BelongsTo
+    public function shipFormat(): BelongsTo
     {
         return $this->belongsTo(ShipFormat::class);
     }

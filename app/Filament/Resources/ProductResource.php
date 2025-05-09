@@ -60,6 +60,7 @@ class ProductResource extends Resource
 
                 Forms\Components\TextInput::make('translation_id')
                     ->columnStart(1)
+                    ->required()
                     ->label('Übersetzungsnummer')
                     ->numeric(),
 
@@ -88,64 +89,80 @@ class ProductResource extends Resource
 
 
                 Forms\Components\TextInput::make('price')
-                    ->columnStart(1)
                     ->label('Preis')
                     ->prefix('CHF')
                     ->numeric(2),
-                #Forms\Components\TextInput::make('sort')
-                #    ->numeric(),
 
-
-                Forms\Components\Select::make('delivery_note')
-                    ->columnStart(1)
-                    ->columnSpan(2)
-                    ->searchable()
-                    ->label('Bemerkung auf Lieferschein aus Übersetzungen')
-                    ->relationship('translation','de')
-                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->id} :  {$record->de}   (fr: {$record->fr} -  it: {$record->it} -  en: {$record->en})")
-                    ->helperText('Neue Einträge über Einstellungen->Übersetzungen machen '),  
 
                 Forms\Components\TextInput::make('delivery_note')
-                    ->label('Bemerkung auf Lieferschein, Nummer')
+                    ->columnStart(1)
+                    ->label('Übersetzungsnummer')
+                    ->nullable()
                     ->numeric(),
 
+                // Forms\Components\Select::make('delivery_note')
+                //     ->nullable()
+                //     ->columnSpan(5)
+                //     ->label('Bemerkung auf Lieferschein aus Übersetzungen')
+                //     ->relationship('translation','de')
+                //     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->id} :  {$record->de}   (fr: {$record->fr} -  it: {$record->it} -  en: {$record->en})")
+                //     ->helperText('Wenn kein Kommentar benötigt wird, 0 eingeben. Neue Einträge: Einstellungen->Übersetzungen'),  
 
-                #Forms\Components\TextInput::make('packaging')
-                #    ->numeric(),
-                
+
+                Forms\Components\TextInput::make('matrix')
+                    ->columnStart(1)
+                    ->maxLength(6),
+
+                Forms\Components\TextInput::make('size')
+                    ->label("Grösse")
+                    ->numeric()
+                    ->helperText("1=Sarsted-Röhrchen"),
+
+                Forms\Components\TextInput::make('weight')
+                    ->label("Gewicht in g")
+                    ->numeric()
+                    ->mask('99.9'),
+
+
+                Forms\Components\TextInput::make('volume')
+                    ->maxLength(10),
+
+
+
                 Forms\Components\Select::make('ship_format_id')
                     ->columnStart(1)
+                    ->columnSpan(2)
                     ->label('Minimal Versandformat')
                     ->default(1)
                     ->helperText('Das minimale Versandformat für diese Probe')
-                    ->relationship('shipformat','textde'),
+                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->id} :  {$record->textde}  ")
+                    ->relationship('shipFormat','textde'),
+
                 Forms\Components\TextInput::make('ship_priority_id')
+                    ->columnSpan(2)
                     ->label('Versandpriortät')
                     ->helperText('1=normal, 4=erst am zweiten Tag')
                     ->numeric(),    
   
+
+                Forms\Components\TextInput::make('evaluation')
+                    ->columnStart(1)
+                    ->columnSpan(2)
+                    ->numeric()
+                    ->helperText('Ringversuchsbericht: in welchem Dok soll die Probe erscheinen'),
+                Forms\Components\TextInput::make('sort3')
+                    ->columnStart(1)
+                    ->numeric(),
+
                 Forms\Components\TextInput::make('type')
                     ->numeric(),
                 Forms\Components\TextInput::make('sort2')
                     ->numeric(),
-                Forms\Components\TextInput::make('evaluation')
-                    ->numeric(),
-                Forms\Components\TextInput::make('sort3')
-                    ->numeric(),
-                Forms\Components\TextInput::make('size')
-                    ->numeric(),
-                Forms\Components\TextInput::make('weight')
-                    ->numeric(),
-                Forms\Components\TextInput::make('translation_id')
-                    ->numeric(),
-                Forms\Components\TextInput::make('matrix')
-                    ->maxLength(6),
-                Forms\Components\TextInput::make('infectious')
-                    ->numeric(),
-                Forms\Components\Toggle::make('active')
-                    ,
-                Forms\Components\TextInput::make('volume')
-                    ->maxLength(10),
+                    Forms\Components\Toggle::make('active')
+                    ->columnStart(1),
+
+                Forms\Components\Toggle::make('infectious'),
+
             ]);
     }
 
