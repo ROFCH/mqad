@@ -41,6 +41,7 @@ class ProductResource extends Resource
                     ->maxLength(50)
                     ->required()
                     ->helperText('Interne Bezeichnung der Probe')
+                    ->required()
                     #->hint('Das ist ein Hint')
                     ->placeholder('Probenbezeichnung'),
                     //->HasHelperText("Das ist die deutsche Bezeichnung der Probe"),
@@ -78,7 +79,9 @@ class ProductResource extends Resource
                 Forms\Components\TextInput::make('code')
                     ->columnStart(1)
                     ->label('Probenkürzel')
+                    ->required()
                     ->maxLength(4),
+
                 Forms\Components\TextInput::make('sample_num')
                     ->label('Anzahl Proben')
                     ->default(1)
@@ -89,14 +92,15 @@ class ProductResource extends Resource
 
 
                 Forms\Components\TextInput::make('price')
-                    ->label('Preis')
+                    ->label('Preis pro Ringversuch')
                     ->prefix('CHF')
-                    ->numeric(2),
+                    ->default(15)
+                    ->numeric(4.2),
 
 
                 Forms\Components\TextInput::make('delivery_note')
                     ->columnStart(1)
-                    ->label('Übersetzungsnummer')
+                    ->label('Text in Lieferschein')
                     ->nullable()
                     ->numeric(),
 
@@ -115,13 +119,12 @@ class ProductResource extends Resource
 
                 Forms\Components\TextInput::make('size')
                     ->label("Grösse")
-                    ->numeric()
+                    ->numeric(1)
                     ->helperText("1=Sarsted-Röhrchen"),
 
                 Forms\Components\TextInput::make('weight')
                     ->label("Gewicht in g")
-                    ->numeric()
-                    ->mask('99.9'),
+                    ->numeric(4,2),
 
 
                 Forms\Components\TextInput::make('volume')

@@ -81,13 +81,15 @@ class SubscriptionResource extends Resource
             ->columns([
 
                 Tables\Columns\TextColumn::make('address_id')
-                    ->label('Tnr'),
+                    ->label('Tnr')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('address.name')
                     ->label('Teilnehmer')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('product.code')
                     ->label('Probe')
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('sample_quantity')
                     ->label('Anzahl')
                     ->sortable(),
@@ -118,7 +120,8 @@ class SubscriptionResource extends Resource
                         //return $query->where('year',date("Y"));
                         return $query->where('stop_year',0)->orWhere('stop_year','>=',date("Y"));
                     }
-                ) ->label('Aktuelles Jahr'),
+                ) ->label('Aktuelles Jahr')
+                ->default(),
 
 
 

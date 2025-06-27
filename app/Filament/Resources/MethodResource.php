@@ -30,6 +30,7 @@ class MethodResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
+            ->columns(4)
             ->schema([
                 Forms\Components\TextInput::make('id')
                     ->disabled(),
@@ -38,6 +39,8 @@ class MethodResource extends Resource
 
 
                 Forms\Components\Select::make('substance_id')
+                    ->columnSpan(2)
+                    ->columnStart(1)
                     ->relationship('substance', 'textde')
                     ->searchable()
                     ->preload()
@@ -47,13 +50,28 @@ class MethodResource extends Resource
 
                     
                 Forms\Components\Select::make('instrument_id')
+                    ->columnSpan(2)
+                    ->columnStart(1)
                     ->relationship('instrument', 'id')
                     ->searchable()
                     ->preload()
                     ->optionsLimit(1000)
                     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->id} ({$record->textde})") ,
+
                 Forms\Components\TextInput::make('sort')
-                    ->numeric(),
+                    ->columnStart(1)
+                    ->numeric()
+                    ->default(1),
+                
+                    Forms\Components\TextInput::make('sort_protocol')
+                    ->label("Sortierung Protokoll")
+                    ->numeric()
+                    ->default(1),
+                
+                    Forms\Components\TextInput::make('protocol')
+                    ->label("Auflisting im Protokoll")
+                    ->default(1)
+                    ->numeric(),    
 
             ]);
     }
@@ -62,21 +80,29 @@ class MethodResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('id')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('number')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('substance.textde')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('instrument.textde')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
+                //Tables\Columns\TextInputColumn::make('protocol'),
+                Tables\Columns\TextColumn::make('substance.product.code')
+                    ->searchable(),
                 //Tables\Columns\TextColumn::make('substancede')
                 //    ->searchable(),
                 //Tables\Columns\TextColumn::make('instrumentde')
                 //    ->searchable(),
-                Tables\Columns\TextColumn::make('sort'),
+                Tables\Columns\TextColumn::make('sort_protocol')
+                    ,
                 Tables\Columns\TextColumn::make('updated_at')
                     ->date()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -102,8 +128,9 @@ class MethodResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\ProtocolsRelationManager::class,
             RelationManagers\ResultsRelationManager::class,
+            RelationManagers\ProtocolsRelationManager::class,
+            
         ];
     }
 

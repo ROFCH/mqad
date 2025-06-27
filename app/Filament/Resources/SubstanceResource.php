@@ -103,10 +103,22 @@ class SubstanceResource extends Resource
                 Forms\Components\Checkbox::make('zero')
                     ->label("Resultat darf Null sein")
                     ->default(true)
-                    ->inline(),                
+                    ->inline(),      
+                Forms\Components\TextInput::make('translation_id')
+                    ->label('Übersetzungs ID')
+                    ->columnstart(1),   
+                Forms\Components\Select::make('translation_id')
+                    ->columnstart(1)
+                    ->columnSpan(5)
+                    ->searchable()
+                    ->label('Übersetzungen der Substanz')
+                    ->relationship('translation','de')
+                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->id} :  {$record->de}   (fr: {$record->fr} -  it: {$record->it} -  en: {$record->en})")
+                    ->helperText('Neue Einträge über Einstellungen->Übersetzungen machen '),             
                 Forms\Components\TextInput::make('remark')
                     ->columnspan(2)
                     ->maxLength(20),
+
             ]);
     }
 
@@ -115,7 +127,8 @@ class SubstanceResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('textde')
                     ->label('Substanz (intern)')
                     ->sortable()

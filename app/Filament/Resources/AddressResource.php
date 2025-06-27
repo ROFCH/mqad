@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Fieldset;
+use Illuminate\Database\Eloquent\Model;
 use App\Filament\Exports\AddressExporter;
 use Filament\Tables\Actions\ExportAction;
 use Illuminate\Database\Eloquent\Builder;
@@ -50,8 +51,7 @@ class AddressResource extends Resource
                         ->maxLength(80),
                     Forms\Components\TextInput::make('address')
                         ->label('Zusatz zum Namen')
-                        ->columnSpan(4)
-                        ->maxLength(80),
+                        ->columnSpan(4),
                     Forms\Components\TextInput::make('address2')
                         ->label('Adresse Strasse + Nummer')
                         ->columnSpan(4)
@@ -106,8 +106,10 @@ class AddressResource extends Resource
                                     ->relationship('labType', 'textde'),
                                 Forms\Components\Select::make('lab_group_id')
                                     ->label('Laborgruppe')
-                                    ->relationship('labGroup', 'textde')
-                                    ->nullable(),
+                                    ->relationship('labGroup','textde', modifyQueryUsing: fn ($query) => $query->orderBy('id'))
+                                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->textde} ({$record->id}) ")
+                                    ->default(1),
+
                                 Forms\Components\Checkbox::make('qualab')
                                     ->default(false)
                                     ->inline(),

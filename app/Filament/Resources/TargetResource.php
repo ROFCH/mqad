@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Survey;
 use App\Models\Target;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -178,18 +179,30 @@ class TargetResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-
+            ->striped()
+            ->paginated([10, 25, 50, 100])
             ->defaultSort('method_num', 'asc')
             ->columns([
                 Tables\Columns\TextColumn::make('method_id')
+                    ->label('Methodenindex')
                     ->sortable()
-                    ->searchable(isIndividual: true),
-                Tables\Columns\TextColumn::make('sample_id')
-                    ->numeric(),
+                    ->searchable(isIndividual: true)
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('method_num')
+                    ->label('Methodennummer')
                     ->sortable()
-                    ->searchable(isIndividual: true),
-                Tables\Columns\TextColumn::make('statustarget.textde'),    
+                    //->searchable(isIndividual: true)
+                    ->toggleable(isToggledHiddenByDefault: true),   
+                Tables\Columns\TextColumn::make('method.substance.product.code')
+                    ->label('Ringversuch')
+                    ->searchable(),
+                       
+                Tables\Columns\TextColumn::make('sample_id')
+                    ->searchable(isIndividual: true)
+                    ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                 
                 Tables\Columns\TextColumn::make('substancede')
                     ->label('Substanz')
                     ->searchable(),
@@ -199,98 +212,98 @@ class TargetResource extends Resource
                 // Tables\Columns\TextColumn::make('value')
                 //     ->numeric()
                 //     ->sortable(),
-                Tables\Columns\TextColumn::make('mean')
-                    ->label('Zielwert')
-                    ->numeric(),
+                Tables\Columns\TextInputColumn::make('mean')
+                    ->label('Zielwert'),
+                Tables\Columns\TextInputColumn::make('code'),    
                 Tables\Columns\TextColumn::make('effective_toleranceabs')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('total')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('count1')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('count2')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('count3')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('count4')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('statustarget.textde'),       
+                // Tables\Columns\TextColumn::make('total')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('count1')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('count2')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('count3')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('count4')
+                //     ->numeric()
+                //     ->sortable(),
 
-                Tables\Columns\TextColumn::make('sum')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('l1')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('l2')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('l3')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('lg')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('lt1')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('lt2')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('lt3')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('stat')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sq1')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sq2')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sq3')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sq4')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sq5')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sq6')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sq7')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sq8')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sq9')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sq10')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sq11')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('autp')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('beme')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('code')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('fmit')
-                    ->numeric()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('sum')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('l1')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('l2')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('l3')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('lg')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('lt1')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('lt2')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('lt3')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('stat')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('sq1')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('sq2')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('sq3')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('sq4')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('sq5')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('sq6')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('sq7')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('sq8')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('sq9')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('sq10')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('sq11')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('autp')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('beme')
+                //     ->searchable(),
+
+                // Tables\Columns\TextColumn::make('fmit')
+                //     ->numeric()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
@@ -299,24 +312,38 @@ class TargetResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('points')
-                    ->numeric()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('points')
+                //     ->numeric()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('survey_id')
                     ->numeric()
                     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\Filter::make('Standard Ringversuch')->query(
-                    function (Builder $query): Builder {
-                        //return $query->where('year',date("Y"));
-                        return $query->where('survey_id',config('app.survey'));
-                    }
-                ) ->label('Ringversuch '. config('app.survey'))->default(),
+                // Tables\Filters\Filter::make('Standard Ringversuch')->query(
+                //     function (Builder $query): Builder {
+                //         //return $query->where('year',date("Y"));
+                //         return $query->where('survey_id',config('app.survey'));
+                //     }
+                // ) ->label('Ringversuch '. config('app.survey'))->default(),
 
-                Tables\Filters\SelectFilter::make('Ringversuch')
-                    ->relationship('survey','id')
-                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->year} - {$record->quarter} ({$record->id})")
+                Tables\Filters\SelectFilter::make('survey_id')
+                        ->label('Ringversuch')
+                        ->options(
+                            Survey::all()->mapWithKeys(function ($survey) {
+                                return [
+                                    $survey->id => "{$survey->year} / Q{$survey->quarter}",
+                                ];
+                            })
+                        )
+                        ->default(Survey::where('def_survey', true)->value('id'))
+                        ->searchable(),
+
+
+
+                // Tables\Filters\SelectFilter::make('Ringversuch')
+                //     ->relationship('survey','id')
+                //     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->year} - {$record->quarter} ({$record->id})")
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -338,6 +365,8 @@ class TargetResource extends Resource
     {
         return [
             //
+
+            RelationManagers\ResultsRelationManager::class,  
         ];
     }
 

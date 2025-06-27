@@ -2,17 +2,18 @@
 
 namespace App\Filament\Resources\MethodResource\RelationManagers;
 
-use App\Models\Method;
-use App\Models\Unit;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\RelationManagers\RelationManager;
+use App\Models\Unit;
 use Filament\Tables;
+use App\Models\Method;
+use App\Models\Survey;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\RelationManagers\RelationManager;
 
 class ResultsRelationManager extends RelationManager
 {
@@ -126,9 +127,23 @@ class ResultsRelationManager extends RelationManager
                  ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('Ringversuch')
-                    ->relationship('survey','id')
-                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->year} - {$record->quarter} ({$record->id})")
+
+                Tables\Filters\SelectFilter::make('survey_id')
+                        ->label('Ringversuch')
+                        ->options(
+                            Survey::all()->mapWithKeys(function ($survey) {
+                                return [
+                                    $survey->id => "{$survey->year} / Q{$survey->quarter}",
+                                ];
+                            })
+                        )
+                        ->default(Survey::where('def_survey', true)->value('id'))
+                        ->searchable(),
+
+
+                // Tables\Filters\SelectFilter::make('Ringversuch')
+                //     ->relationship('survey','id')
+                //     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->year} - {$record->quarter} ({$record->id})")
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()

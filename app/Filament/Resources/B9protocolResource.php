@@ -36,7 +36,7 @@ class B9protocolResource extends Resource
                     ->maxLength(85),
                 Forms\Components\TextInput::make('diagnosis')
                     ->maxLength(85),
-                Forms\Components\TextInput::make('language')
+                Forms\Components\TextInput::make('language_id')
                     ->numeric(),
                 Forms\Components\TextInput::make('question')
                     ->maxLength(85),

@@ -70,6 +70,10 @@ class CertificateRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('substance.product.code')
                     ->label('Probe')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('substance.ealn')
+                    ->label('ealn')
+                    ->numeric(decimalPlaces: 2, locale: 'us')
+                    ->sortable(),    
                 Tables\Columns\TextColumn::make('substance.textde')
                     ->label('Substanz'),
                 Tables\Columns\TextInputColumn::make('success')

@@ -2,17 +2,19 @@
 
 namespace App\Filament\Resources\AddressResource\RelationManagers;
 
-use App\Models\Method;
-use App\Models\Unit;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\RelationManagers\RelationManager;
+use App\Models\Unit;
 use Filament\Tables;
+use App\Models\Method;
+use App\Models\Survey;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\RelationManagers\RelationManager;
 
 class ResultsRelationManager extends RelationManager
 {
@@ -59,6 +61,7 @@ class ResultsRelationManager extends RelationManager
 
                 Forms\Components\select::make('device_id')
                     ->label("Zusatzmethode")
+                    ->nullable()
                     ->relationship('device', 'id')
                     ->optionsLimit(100000)
                     ->preload()
@@ -85,11 +88,13 @@ class ResultsRelationManager extends RelationManager
                 ->toggleable(isToggledHiddenByDefault: true),
             Tables\Columns\TextColumn::make('method.substance.product.code')
                 ->label('Probe')
-                ->sortable(),
+                ->sortable()
+                ->searchable(),
             Tables\Columns\TextColumn::make('sample_id')
                 ->label('Probe'), 
             Tables\Columns\TextColumn::make('method.substance.textde')
                 ->label('Substanz')
+                ->searchable()
                 ->sortable(),
             Tables\Columns\TextColumn::make('method.instrument.textde')
                 ->label('Gerät')
@@ -124,23 +129,33 @@ class ResultsRelationManager extends RelationManager
             Tables\Columns\TextColumn::make('quarter')
                  ->toggleable(isToggledHiddenByDefault: true),
             ])
+            // ->defaultSort('survey_id', 'desc')
+            // ->defaultSort('address_id', 'asc')
             ->filters([
-                Tables\Filters\Filter::make('Standard Ringversuch')->query(
-                    function (Builder $query): Builder {
-                        //return $query->where('year',date("Y"));
-                        return $query->where('survey_id',config('app.survey'));
-                    }
-                ) ->label('Ringversuch '. config('app.survey'))->default(),
+                
+                
+                Tables\Filters\SelectFilter::make('survey_id')
+                        ->label('Ringversuch')
+                        ->options(
+                            Survey::all()->mapWithKeys(function ($survey) {
+                                return [
+                                    $survey->id => "{$survey->year} / Q{$survey->quarter}",
+                                ];
+                            })
+                        )
+                        ->default(Survey::where('def_survey', true)->value('id'))
+                        ,
+                
+                
 
-                Tables\Filters\SelectFilter::make('Ringversuch')
-                    ->relationship('survey','id')
-                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->year} - {$record->quarter} ({$record->id})")
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                 ->label('Neuer Eintrag')
                 ->icon('heroicon-s-plus')
                 ->modalHeading('Neues Resultat'),
+                
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make()

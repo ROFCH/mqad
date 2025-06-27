@@ -42,4 +42,10 @@ class Target extends Model
         return $this->belongsTo(Survey::class);
     }
 
+    public function results(): HasMany
+    {
+        return $this->hasMany(Result::class, 'method_id','method_id');
+    }
+
+
 }

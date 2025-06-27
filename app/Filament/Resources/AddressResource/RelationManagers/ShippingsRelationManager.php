@@ -30,18 +30,20 @@ class ShippingsRelationManager extends RelationManager
     {
         return $table
             //->defaultSort('year', 'desc')
-            ->defaultSort(function (Builder $query): Builder {
-                return $query
-                ->orderBy('year','desc')
-                ->orderBy('quarter','desc');
-                })
-
+            // ->defaultSort(function (Builder $query): Builder {
+            //     return $query
+            //     ->orderBy('year','desc')
+            //     ->orderBy('quarter','desc');
+            //     })
+            ->defaultSort('survey_id','desc')
 
             ->recordTitleAttribute('shipping_id')
             ->columns([
-                Tables\Columns\TextColumn::make('year')
+                Tables\Columns\TextColumn::make('survey_id')
+                    ->label('Ringversuch'),
+                Tables\Columns\TextColumn::make('survey.year')
                     ->label('Jahr'),
-                Tables\Columns\TextColumn::make('quarter')
+                Tables\Columns\TextColumn::make('survey.quarter')
                     ->label('Quartal'),    
                 Tables\Columns\TextColumn::make('lot')
                     ->label('Lot-Nr'),       

@@ -105,21 +105,24 @@ class ProtocolsRelationManager extends RelationManager
                 // ),
 
 
-
-
-                Forms\Components\Select::make('device_id')
+                Forms\Components\TextInput::make('device_id')
                     ->label('Zusatzmethode')
-                    ->preload()
-                    ->optionsLimit(10000)
-                    ->searchable()
-                    ->relationship('device','textde',
-                        modifyQueryUsing: fn (Builder $query) => $query->orderBy('textde', 'asc'))
-                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->textde}  ({$record->id}) ")
-                    ->nullable(),
+                    ->default(0),
+
+                // Forms\Components\Select::make('device_id')
+                //     ->label('Zusatzmethode')
+                //     ->preload()
+                //     ->optionsLimit(10000)
+                //     ->searchable()
+                //     ->relationship('device','textde',
+                //         modifyQueryUsing: fn (Builder $query) => $query->orderBy('textde', 'asc'))
+                //     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->textde}  ({$record->id}) ")
+                //     ->nullable(),
                 
                 Forms\Components\TextInput::make('device_num')
                     ->label('Gerätenummer')
-                    ->maxLength(10),
+                    ->maxLength(10)
+                    ->default(' '),
                 Forms\Components\TextInput::make('Serialnumber')
                     ->label('Seriennummer')
                     ->maxLength(10),
@@ -164,16 +167,22 @@ class ProtocolsRelationManager extends RelationManager
 
                 Tables\Columns\TextColumn::make('method.substance.product.code')
                     ->label('Probe')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('method.substance.textde')
                     ->label('Substanz')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('method.instrument.textde')
                     ->label('Gerät')
-                    ->sortable(),    
+                    ->sortable()
+                    ->searchable(),    
                 Tables\Columns\TextColumn::make('method.number')
-                    ->label('Methode')
+                    ->label('Methode NUM')
                     ->sortable(), 
+                Tables\Columns\TextColumn::make('method_id')
+                    ->label('Methode ID')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),     
                 Tables\Columns\TextColumn::make('device.textde')
                     ->label('Zusatzmethode'),
                 Tables\Columns\TextColumn::make('device_num')

@@ -57,16 +57,20 @@ class TranslationResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('de')
                     ->label('Deutsch')
-                    ->searchable(),
+                    ->searchable()
+                    ->wrap(),
                     Tables\Columns\TextColumn::make('fr')
                     ->label('Französisch')
-                    ->searchable(),
+                    ->searchable()
+                    ->wrap(),
                     Tables\Columns\TextColumn::make('it')
                     ->label('Italienisch')
-                    ->searchable(),
+                    ->searchable()
+                    ->wrap(),
                     Tables\Columns\TextColumn::make('en')
                     ->label('Englisch')
-                    ->searchable(),                   
+                    ->searchable()
+                    ->wrap(),                   
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()

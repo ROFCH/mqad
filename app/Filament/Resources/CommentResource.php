@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Survey;
 use App\Models\Comment;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -38,6 +39,8 @@ class CommentResource extends Resource
                     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->code} ({$record->id})"),
                 Forms\Components\TextInput::make('sample')
                     ->numeric(),
+                Forms\Components\TextInput::make('type')
+                    ->numeric(),    
                 Forms\Components\TextInput::make('textch')
                     ->label('Titel')
                     ->columnStart(1),
@@ -98,7 +101,8 @@ class CommentResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('de')
                     ->label('Text')
-                    ->searchable(),
+                    ->searchable()
+                    ->wrap(),
                 // Tables\Columns\TextColumn::make('fr')
                 //     ->searchable(),
                 // Tables\Columns\TextColumn::make('it')
@@ -115,7 +119,17 @@ class CommentResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('survey_id')
+                        ->label('Ringversuch')
+                        ->options(
+                            Survey::all()->mapWithKeys(function ($survey) {
+                                return [
+                                    $survey->id => "{$survey->year} / Q{$survey->quarter}",
+                                ];
+                            })
+                        )
+                        ->default(Survey::where('def_survey', true)->value('id'))
+                        ,
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

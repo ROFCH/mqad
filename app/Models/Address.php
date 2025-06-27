@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+//use Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Address extends Model
 {
@@ -39,6 +41,13 @@ class Address extends Model
         'no_reminder' => 'boolean',
         'temp_no_reminder' => 'boolean',
     ];
+
+    protected function address2(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => preg_replace('/\s+/', ' ', trim($value)),
+        );
+    }
 
     public function getActivitylogOptions(): LogOptions
     {

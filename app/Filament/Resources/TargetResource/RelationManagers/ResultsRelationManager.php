@@ -1,39 +1,30 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\TargetResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Result;
 use App\Models\Survey;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Model;
+use App\Filament\Exports\ResultExporter;
+use Filament\Tables\Actions\ExportAction;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\ResultResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\ResultResource\RelationManagers;
+use Filament\Resources\RelationManagers\RelationManager;
 
-class ResultResource extends Resource
+class ResultsRelationManager extends RelationManager
 {
-    protected static ?string $model = Result::class;
+    protected static string $relationship = 'results';
 
-    protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
-    protected static ?string $navigationGroup = 'Daten zur Adresse';
-    protected static ?string $navigationLabel = 'Resultate';
-
-    protected static ?string $pluralModelLabel = 'Resultate';
-    protected static ?string $modelLabel = 'Resultat';
-
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('survey_id')
-                    ->numeric(),
-                Forms\Components\Select::make('address_id')
-                    ->relationship('address', 'name'),
+                Forms\Components\TextInput::make('method_id')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('method_num')
                     ->numeric(),
                 Forms\Components\Select::make('method_id')
@@ -52,22 +43,19 @@ class ResultResource extends Resource
                     ->maxLength(10),
                 Forms\Components\TextInput::make('department')
                     ->numeric(),
-                Forms\Components\TextInput::make('year')
-                    ->numeric(),
-                Forms\Components\TextInput::make('quarter')
-                    ->numeric(),
+
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('method_id')
             ->columns([
-                // Tables\Columns\TextColumn::make('survey_id')
-                //     ->numeric()
-                //     ->sortable(),
+                
                 Tables\Columns\TextColumn::make('address.id')
-                    ->searchable(),
+                    ->label("Teilnehmer")
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('address_display')
                     ->label('Adresse')
@@ -80,44 +68,50 @@ class ResultResource extends Resource
                             : ($name ?: $city ?: '-');
                     }) ,
 
-
-                // Tables\Columns\TextColumn::make('method_num')
-                //     ->sortable(),
-                Tables\Columns\TextColumn::make('method.id')
-                    ->sortable(),
-
-                Tables\Columns\TextColumn::make('method.substance.product.code')
-                    ->searchable(),              
-                Tables\Columns\TextColumn::make('method.substance.textde')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('method.instrument.textde')
-                    ->searchable(),
-
+                // Tables\Columns\TextColumn::make('address.name')
+                //     ->label('Name'),    
+                
                 Tables\Columns\TextColumn::make('value')
                     ->label("Wert")
                     ->numeric()
                     ->sortable()
                     ->formatStateUsing(fn ($state) => number_format($state, 3, '.', '')),
-                
+
                 Tables\Columns\TextColumn::make('unit.unitsymbol.textde')
-                    ->label("Einheit"),
+                    ->label("Einheit"),    
+
+                
+                Tables\Columns\TextColumn::make('device_id')
+                    ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('device.textde')
+                    ->label("Zusatzmethode")
+                    ->sortable(),    
+
+                Tables\Columns\TextColumn::make('device_num')
+                    ->label("Gerätenummer")
+                    ->searchable(),
 
                 Tables\Columns\TextColumn::make('additional_value')
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('device_num')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('device_id')
-                    ->numeric()
-                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('serialnumber')
-                    ->searchable()
+                    ->label('Seriennummer')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('department')
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('staff_id')
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),  
+                Tables\Columns\TextColumn::make('survey_id')
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),          
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
@@ -127,10 +121,11 @@ class ResultResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
+
+
             ])
-
-
-
+            ->defaultSort('value', 'asc')
+            
             ->filters([
 
                 Tables\Filters\SelectFilter::make('survey_id')
@@ -146,29 +141,18 @@ class ResultResource extends Resource
                         ->searchable(),
 
             ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
+                ExportAction::make()->exporter(ResultExporter::class),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListResults::route('/'),
-            'create' => Pages\CreateResult::route('/create'),
-            'edit' => Pages\EditResult::route('/{record}/edit'),
-        ];
     }
 }

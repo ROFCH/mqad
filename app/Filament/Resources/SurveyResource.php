@@ -54,6 +54,9 @@ class SurveyResource extends Resource
                 Forms\Components\TextInput::make('remark')
                     ->columnspan(2)
                     ->maxLength(50),
+                Forms\Components\TextInput::make('def_survey')
+                    ->columnStart(1)
+                    ->numeric(),    
             ]);
     }
 
@@ -88,6 +91,8 @@ class SurveyResource extends Resource
                     ->sortable(),
                 Tables\Columns\CheckboxColumn::make('regular')
                     ->sortable(),    
+                Tables\Columns\CheckboxColumn::make('def_survey')
+                    ->sortable(),        
                 Tables\Columns\TextColumn::make('remarks')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('online_id')
