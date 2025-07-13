@@ -4,6 +4,7 @@ namespace App\Filament\Resources\AddressResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Survey;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\Filter;
@@ -19,9 +20,14 @@ class SchedulesRelationManager extends RelationManager
 
     public function form(Form $form): Form
     {
+
+        $currentSurvey = Survey::where('status', 1)->orderByDesc('id')->first();
+
         return $form
+            ->columns(4)
             ->schema([
                 Forms\Components\Select::make('schedule_type_id')
+                    ->columnSpan(2)
                     ->label('Termintyp')
                     ->required()
                     ->preload()
@@ -29,8 +35,11 @@ class SchedulesRelationManager extends RelationManager
                         name:'schedule_type',
                         titleAttribute: 'textde',
                         )
-                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->id} {$record->textde}"),   
+                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->id} {$record->textde}")                
+                    ->default(2),   
+
                 Forms\Components\Select::make('survey_id')
+                    ->columnStart(1)
                     ->label('Ringversuch')
                     ->required()
                     ->preload()
@@ -39,13 +48,31 @@ class SchedulesRelationManager extends RelationManager
                         titleAttribute: 'id',
                         modifyQueryUsing: fn (Builder $query) => $query->orderBy('year','desc')
                         )
-                     ->getOptionLabelFromRecordUsing(fn (Model $record) => " {$record->year} - {$record->quarter}  ({$record->id}) "),    
-                Forms\Components\TextInput::make('year')
-                    ->label('Jahr')
-                    ->required(),
+                     ->getOptionLabelFromRecordUsing(fn (Model $record) => " {$record->year} - {$record->quarter}  ({$record->id}) ")
+                     ->default($currentSurvey?->id),
+
+
+
                 Forms\Components\TextInput::make('quarter')
                     ->label('Quartal')
-                    ->required(),
+                    
+                    ->default($currentSurvey?->quarter),
+
+
+                Forms\Components\TextInput::make('year')
+                    ->label('Jahr')
+                    
+                    ->default($currentSurvey?->year),
+
+
+
+
+
+
+                Forms\Components\TextInput::make('remark')
+                    ->label('Bemerkungen')
+                    
+                    ->columnSpan(4),    
 
             ]);
     }

@@ -78,6 +78,11 @@ class CertificateResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+
+
+            ->paginated()
+            ->paginationPageOptions([10, 25, 50])
+
             ->filters([
                 Tables\Filters\Filter::make('Aktuelles Jahr')->query(
                     function (Builder $query): Builder {

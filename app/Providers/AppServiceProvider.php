@@ -5,6 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Model; 
 
+use Filament\Facades\Filament;
+
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -22,5 +25,14 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Model::unguard();
-    }
+
+
+    Filament::serving(function () {
+        Filament::registerRenderHook(
+            'scripts.end',
+            fn (): string => view('filament.scripts.focus-next')->render(),
+        );
+    });
+}
+
 }

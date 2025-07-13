@@ -23,6 +23,11 @@ class Statcode extends Model
     }
 
 
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
     public function code(): BelongsTo
     {
         return $this->belongsTo(Code::class, 'code_code', 'code');

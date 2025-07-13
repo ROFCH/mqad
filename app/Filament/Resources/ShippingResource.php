@@ -2,16 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ShippingResource\Pages;
-use App\Filament\Resources\ShippingResource\RelationManagers;
-use App\Models\Shipping;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Survey;
+use App\Models\Shipping;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\ShippingResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\ShippingResource\RelationManagers;
 
 class ShippingResource extends Resource
 {
@@ -109,9 +110,31 @@ class ShippingResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+
+            ->paginated()
+            ->paginationPageOptions([10, 25, 50])
+
+
             ->filters([
-                //
+
+                Tables\Filters\SelectFilter::make('survey_id')
+                        ->label('Ringversuch')
+                        ->options(
+                            Survey::query()
+                                ->orderByDesc('year')
+                                ->orderByDesc('quarter')
+                                ->get()
+                                ->mapWithKeys(fn ($survey) => [
+                                    $survey->id => "{$survey->year} / Q{$survey->quarter}",
+                                ])
+                        )
+                        ->default(Survey::where('def_survey', true)->value('id'))
+                        ->searchable(),
+
             ])
+
+
+
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])

@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Tabs;
+use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Fieldset;
 use Illuminate\Database\Eloquent\Model;
 use App\Filament\Exports\AddressExporter;
@@ -28,7 +29,18 @@ class AddressResource extends Resource
     protected static ?string $pluralModelLabel = 'Adressen';
     protected static ?string $modelLabel = 'Adresse';
 
+    public static function canDelete(Model $record): bool
+        {
+            return false;
+        }
+
+
+
     public static function form(Form $form): Form
+
+
+
+    
     {
         return $form
 
@@ -38,15 +50,15 @@ class AddressResource extends Resource
                 ->columnSpanFull()
                 ->tabs([
                     Tabs\Tab::make('Basis')
-                        ->columns(columns: 4)
+                        ->columns(columns: 8)
                         ->schema([ 
                     Forms\Components\TextInput::make('id')
-                        ->disabled()
-                        ->maxLength(80),                       
+                        ->disabled(),                       
                     Forms\Components\TextInput::make('salutation')
                         ->label('Anrede')
                         ->maxLength(80),
                     Forms\Components\TextInput::make('name')
+                        ->columnStart(1)
                         ->columnSpan(4)
                         ->maxLength(80),
                     Forms\Components\TextInput::make('address')
@@ -54,6 +66,7 @@ class AddressResource extends Resource
                         ->columnSpan(4),
                     Forms\Components\TextInput::make('address2')
                         ->label('Adresse Strasse + Nummer')
+                        ->ColumnStart(1)
                         ->columnSpan(4)
                         ->maxLength(80),
                     Forms\Components\TextInput::make('country')
@@ -73,10 +86,11 @@ class AddressResource extends Resource
                     ->maxLength(20),
                 Forms\Components\TextInput::make('mail')
                             ->label('E-Mail')
+                            ->columnSpan(2)
                     ->maxLength(80),
                 Forms\Components\TextInput::make('contact')
                             ->label('Kontaktperson')
-                    ->columnSpan(2)
+                    ->columnSpan(1)
                     ->maxLength(50),
                 Forms\Components\TextInput::make('remarks')
                             ->label('Bemerkungen')
@@ -266,7 +280,8 @@ class AddressResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->searchable(isIndividual: true),
+                    ->searchable(isIndividual: true)
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('salutation')
                     ->label('Anrede'),
                 Tables\Columns\TextColumn::make('name')
@@ -285,22 +300,24 @@ class AddressResource extends Resource
                     ->label('Stadt')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('country')
-                    ->label('Land'),
+                    ->label('Land')
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('phone')
                     ->label('Telefon')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('mail')
-                    ->searchable(),
-                // Tables\Columns\TextColumn::make('contact')
-                //     ->searchable(),
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('contact')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 // Tables\Columns\TextColumn::make('remarks')
                 //     ->label('Bemerkungen'),
-                // Tables\Columns\TextColumn::make('language.textde')
-                //     ->label('Sprache'),
-                // Tables\Columns\TextColumn::make('labType.textde')
-                //     ->numeric(),
-                // Tables\Columns\TextColumn::make('labGroup.textde')
-                //     ->numeric(),
+                Tables\Columns\TextColumn::make('language.textde')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('labType.textde')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('labGroup.textde')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -308,11 +325,14 @@ class AddressResource extends Resource
                     ->dateTime()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+
+            ->paginated()
+            ->paginationPageOptions([10, 25, 50])
+
             ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+                 Filter::make('Status < 3')
+                ->query(fn (Builder $query) => $query->where('status_id', '<', 3))
+                ->default(), // ← das macht ihn zum Standardfilter
             ])
 
             ->headerActions([

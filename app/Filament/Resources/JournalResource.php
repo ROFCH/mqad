@@ -105,6 +105,9 @@ class JournalResource extends Resource
 
             ])
 
+            ->paginated()
+            ->paginationPageOptions([10, 25, 50])
+
             ->defaultSort('address_id', 'asc')
             
             ->filters([

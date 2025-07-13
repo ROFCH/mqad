@@ -95,6 +95,10 @@ class InvoiceResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+
+            ->paginated()
+            ->paginationPageOptions([10, 25, 50])
+
             ->filters([
                 Tables\Filters\Filter::make('Standard Jahr')->query(
                     function (Builder $query): Builder {

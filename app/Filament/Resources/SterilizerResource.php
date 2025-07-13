@@ -139,7 +139,14 @@ class SterilizerResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('year')
+                    ->label('Jahr')
+                    ->options([
+                        date('Y') => date('Y'),
+                        date('Y') - 1 => 'Letztes Jahr',
+                        date('Y') - 2 => 'Vorletztes Jahr',
+                    ])
+                    ->default(date('Y')),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

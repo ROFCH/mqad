@@ -2,16 +2,18 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CodeResource\Pages;
-use App\Filament\Resources\CodeResource\RelationManagers;
-use App\Models\Code;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\Code;
 use Filament\Tables;
+use App\Models\Product;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\CodeResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\CodeResource\RelationManagers;
 
 class CodeResource extends Resource
 {
@@ -24,13 +26,25 @@ class CodeResource extends Resource
     protected static ?string $pluralModelLabel = 'Codes';
     protected static ?string $modelLabel = 'Code';
 
+
+    // public static function getEloquentQuery(): Builder
+    // {
+    //     return parent::getEloquentQuery()
+    //         ->join('products', 'codes.product_id', '=', 'products.id')
+    //         ->select('codes.*')
+    //         ->orderBy('products.code');
+    // }
+
+
+
     public static function form(Form $form): Form
     {
         return $form
             ->columns(3)
             ->schema([
                 Forms\Components\TextInput::make('code')
-                    ->numeric(),
+                    ->numeric()
+                    ,
                 Forms\Components\TextInput::make('sort')
                     ->label('Reihenfolge')
                     ->numeric(),
@@ -61,10 +75,20 @@ class CodeResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->defaultSort('sort', 'asc')
+            //->defaultSort('product.code', 'asc')
+            // ->defaultSort(function (Builder $query): Builder {
+            //     return $query
+            //         ->orderBy('product.code')
+            //         ->orderBy('code.sort');
+            //     })
+            
+
+
             ->columns([
                 Tables\Columns\TextColumn::make('product.code')
-                    ->label('RV'),
+                    ->label('RV')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('code')
                     ->label('code'),
                 Tables\Columns\TextColumn::make('textde')
@@ -73,7 +97,7 @@ class CodeResource extends Resource
                 Tables\Columns\TextColumn::make('sort')
                     ->numeric()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ,
                 Tables\Columns\TextColumn::make('translation_id')
                     ->label('Übersetzung'),
                 Tables\Columns\TextColumn::make('created_at')
@@ -85,8 +109,27 @@ class CodeResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('sort')
             ->filters([
-                //
+                   
+                SelectFilter::make('product_id')
+                    ->label('Produkt')
+                    ->options(
+                        Product::query()
+                            ->whereIn('id', function ($query) {
+                                $query->select('product_id')
+                                    ->from('codes')
+                                    ->whereNotNull('product_id'); // optional, falls nullable
+                            })
+                            ->orderBy('code')
+                            ->get()
+                            ->mapWithKeys(function ($product) {
+                                return [$product->id => "{$product->code} ({$product->id})"];
+                            })
+                    )
+                    ->searchable()
+                    ->placeholder('Alle Produkte')
+       
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

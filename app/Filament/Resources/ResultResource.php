@@ -87,7 +87,7 @@ class ResultResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('method.substance.product.code')
-                    ->searchable(),              
+                    ->searchable(isIndividual: true),              
                 Tables\Columns\TextColumn::make('method.substance.textde')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('method.instrument.textde')
@@ -128,19 +128,21 @@ class ResultResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
 
             ])
-
-
+            ->paginated()
+            ->paginationPageOptions([10, 25, 50])
 
             ->filters([
 
                 Tables\Filters\SelectFilter::make('survey_id')
                         ->label('Ringversuch')
                         ->options(
-                            Survey::all()->mapWithKeys(function ($survey) {
-                                return [
+                            Survey::query()
+                                ->orderByDesc('year')
+                                ->orderByDesc('quarter')
+                                ->get()
+                                ->mapWithKeys(fn ($survey) => [
                                     $survey->id => "{$survey->year} / Q{$survey->quarter}",
-                                ];
-                            })
+                                ])
                         )
                         ->default(Survey::where('def_survey', true)->value('id'))
                         ->searchable(),

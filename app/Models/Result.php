@@ -12,7 +12,7 @@ class Result extends Model
 {
     
     use LogsActivity;
-    
+    public $timestamps = true;
     
     protected $casts = [
         'id' => 'integer',
@@ -55,5 +55,14 @@ class Result extends Model
     {
         return $this->belongsTo(Survey::class);
     }
+
+    public function target()
+    {
+        return \App\Models\Target::where('method_id', $this->method_id)
+            ->where('sample_id', $this->sample_id)
+            ->first();
+    }
+
+
 
 }
